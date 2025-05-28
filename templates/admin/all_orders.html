@@ -1,0 +1,235 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+      {% block content %}
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+<div class="row">
+    <h4>Order Management</h4>
+    </div>
+
+
+    {% if messages %}
+    {% for message in messages %}
+    
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-check-circle"></i> {{ message }}
+    </div>
+    
+    {% endfor %}
+    {% endif%}
+
+
+    {% for item in orderData %}
+    <div class="modal fade" id="viewProducts-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>View Products<small></small></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                       
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in item.items.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{product.product.category.brand.name}}</td>
+                        <td>{{product.product.category.title}}</td>
+                        <td>{{product.product.title}}</td>
+                        <td>
+                          {% if product.product.product_image %}
+                            <img src="{{product.product.product_image.url}}" alt="{{product.product.product_ttile}}" style="width:150px;">
+                          {% endif %}
+                        </td>
+                        <td>{{product.product.price}}</td>
+                        <td>{{product.quantity}}</td>
+                                        
+                        
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                    
+                        
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+              </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+    {% for item in orderData %}
+    <div class="modal fade" id="editStatus-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Edit Order<small></small></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                  <form method="post" action="{% url 'store:editStatus' item.id %}">
+                    {% csrf_token %}
+
+                  <div class="row">
+
+                  <div class="col md-4">
+                    <label for="status" class="form-label">Order Status</label>
+                    <select id="status" name="status" class="form-control">
+                        <option value="Pending" {% if item.status == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Accepted" {% if item.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                        <option value="Packed" {% if item.status == 'Packed' %}selected{% endif %}>Packed</option>
+                        <option value="On The Way" {% if item.status == 'On The Way' %}selected{% endif %}>On The Way</option>
+                        <option value="Delivered" {% if item.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="Cancelled" {% if item.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="col md-4">
+                  <label for="payment_status" class="form-label">Payment Status</label>
+                  <select id="payment_status" name="payment_status" class="form-control">
+                      <option value="Paid" {% if item.payment_status == 'Paid' %}selected{% endif %}>Paid</option>
+                      <option value="UnPaid" {% if item.payment_status == 'UnPaid' %}selected{% endif %}>UnPaid</option>
+                     
+                  </select>
+              </div>
+
+                </div>
+                <br>
+                    
+                        
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cose</button>
+              </div>
+              </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+   
+
+
+      <div class="row">
+            
+            <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    
+
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table" id="example">
+                      <thead class="thead-light">
+                        <tr>
+                         
+                          <th>#</th>
+                          <th>Customer</th>
+                          <th>Ordered Date</th>
+                          <th>Order Status</th>
+                          <th>Payment Status</th>
+                          <th>Delivery Address</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for order in orderData %}
+                        <tr>
+                         
+                          <td>{{forloop.counter}}</td>
+                          <td>{{order.user.username}}</td>
+                          <td>{{order.ordered_date}}</td>
+                            <td>
+      
+                              {% if order.status == 'Pending' %}
+                              <span class="badge bg-info"> {{order.status}}</span>
+                              {% elif order.status == 'Accepted' %}
+                              <span class="badge bg-primary"> {{order.status}}</span>
+                              {% elif order.status == 'Packed' %}
+                              <span class="badge bg-secondary"> {{order.status}}</span>
+                              {% elif order.status == 'On The Way' %}
+                              <span class="badge bg-warning"> {{order.status}}</span>
+                              {% elif order.status == 'Delivered' %}
+                              <span class="badge bg-success"> {{order.status}}</span>
+                              {% elif order.status == 'Cancelled' %}
+                              <span class="badge bg-danger"> {{order.status}}</span>
+                              {% endif %}
+      
+                            </td>
+                            <td>
+                              {% if order.payment_status == 'UnPaid' %}
+                              <span class="badge bg-danger text-white">  {{order.payment_status}}</span>
+                              {% else %}
+                              <span class="badge bg-success text-white">  {{order.payment_status}}</span>
+                              {% endif %}
+                             
+                            </td>
+                            <td>
+                              {{order.deliveryAddress.address}}
+                            </td>
+                          
+                          
+                            <td> 
+                                <button type="button" class="btn btn-primary" title="Edit"  data-toggle="modal" data-target="#editStatus-{{forloop.counter}}">Edit</button>
+                                <button type="button" class="btn btn-success" title="View" data-toggle="modal" data-target="#viewProducts-{{forloop.counter}}">View</button>
+                                
+                            </td>
+                          
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+    
+     
+      
+      </div>
+
+
+
+
+
+
+      {% endblock content %}

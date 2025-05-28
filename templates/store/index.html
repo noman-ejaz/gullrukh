@@ -1,0 +1,353 @@
+{% extends 'base.html' %}
+{% load static %}
+
+      {% block content %}
+
+      <!-- HERO SECTION-->
+      <div class="container col-md-10">
+        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center" style="background: url({% static 'img/banner.jpeg' %})">
+          <div class="container py-5">
+            <div class="row px-4 px-lg-5">
+              <div class="col-lg-6">
+                <!-- <p class="text-muted small text-uppercase mb-2">New Inspiration 2024</p> -->
+                <!-- <h1 class="h2 text-uppercase mb-3">20% off on new season</h1> -->
+                <!-- <a class="btn btn-dark" href="{% url 'store:all-categories' %}">Browse collections</a> -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section class="pt-5">
+          <header class="text-center">
+            <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
+            <h2 class="h5 text-uppercase mb-4">Browse our Brands</h2>
+          </header>
+
+          <div class="row">
+            {% for item in brands %}
+              <div class="col-md-4 mb-4">
+                <a href="{% url 'store:brand_products' item.id %}" class="card text-center text-decoration-none" style="background-image: url('{{ item.brand_image.url }}'); background-size: cover; background-position: center; height: 200px; position: relative; display: flex; align-items: center; justify-content: center;">
+                  <!-- Dark overlay for contrast (optional, can remove if not needed) -->
+                  <div class="overlay" style="background-color: rgba(0,0,0,0.2); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                  
+                  <!-- Brand name with white background -->
+                  <h5 class="card-title" style="z-index: 1; background-color: white; color: black; padding: 8px 16px; border-radius: 6px; font-size: 1.5rem;">
+                    {{ item.name }}
+                  </h5>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+
+
+
+
+          <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{% url 'store:all_brands' %}" class="btn btn-dark px-4 py-2">
+                    Explore All
+                </a>
+            </div>
+        </div>
+        
+
+        </section>
+
+
+        <section class="pt-5">
+          <header class="text-center">
+            <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
+            <h2 class="h5 text-uppercase mb-4">Browse our Categories</h2>
+          </header>
+          <div class="row">
+          
+             {% for item in categories %}
+              <div class="col-md-4 mb-4 mb-md-0">
+                <a class="category-item" href="{% url 'store:category-products' item.id %}">
+                 
+              {% if item.category_image %}
+                    <img class="img-fluid" src="{{ item.category_image.url }}" alt="" width="750px" height="1050px">
+                    {% else %}
+                    <img class="img-fluid" src="{% static 'img/cat-img-1.jpg' %}" width="750px" height="1050px" alt="{{ category.title }}">
+                    {% endif %}
+                 
+                  <strong class="category-item-title">{{item.title}}</strong>
+                </a>
+              </div>
+              {% endfor %}
+
+              <!-- <div class="col-md-4 mb-4 mb-md-0">
+                <a class="category-item" href="">
+                 
+                    <img class="img-fluid" src="{% static 'img/cat-img-1.jpg' %}" alt="">
+                   
+                    
+                  <strong class="category-item-title">Clothes</strong>
+                </a>
+              </div>
+
+              <div class="col-md-4 mb-4 mb-md-0">
+                <a class="category-item" href="">
+                 
+                    <img class="img-fluid" src="{% static 'img/cat-img-1.jpg' %}" alt="">
+                   
+                   
+                 
+                  <strong class="category-item-title">Jackets</strong>
+                </a>
+              </div> -->
+            
+           
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{% url 'store:all-categories' %}" class="btn btn-dark px-4 py-2">
+                    Explore All
+                </a>
+            </div>
+        </div>
+
+        </section>
+
+        <section class="py-5">
+          <header class="text-center">
+            <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+            <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
+          </header>
+          <div class="row">
+
+           
+              
+                <!-- PRODUCT-->
+                 {% for item in products %}
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                  <div class="product text-center">
+                    <div class="position-relative mb-3">
+
+                       {% if item.sale %}
+                            <div style="position: absolute; top: 10px; left: 10px; background-color: red; color: white; padding: 2px 8px; font-size: 12px; border-radius: 3px; z-index: 10;">
+                                SALE
+                            </div>
+                            {% endif %}
+
+                      <div class="badge text-white badge-"></div>
+                      
+                      <a class="d-block" href="{% url 'store:product_detail' item.id %}">   
+                        {% if item.product_image %}
+                        <img class="img-fluid w-100" src="{{ item.product_image.url }}" alt="">
+                        {% else %}
+                        <img class="img-fluid w-100" src="{% static 'img/cat-img-2.jpg' %}" alt="">
+                        {% endif %}
+
+                                                          
+                      </a>
+
+                      <div class="product-overlay">
+                        <ul class="mb-0 list-inline">
+                          <!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li> -->
+                          <li class="list-inline-item m-0 p-0">
+                            {% comment %} <a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
+
+                            <form action="{% url 'store:add-to-cart' %}">
+                              <input type="hidden" name="prod_id" value="{{item.id}}" id="product_id">
+                              <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
+                            </form>
+
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <h6> <a class="reset-anchor" href="{% url 'store:product_detail' item.id %}">{{item.title}}</a></h6>
+                    <p class="small text-muted">{{item.price}}</p>
+                  </div>
+                </div>
+
+              {% endfor %}
+
+                
+            
+
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4">
+                Showing {{ products.start_index }} to {{ products.end_index }} of {{ products.paginator.count }} entries
+                </div>
+                <div class="col-md-5">
+                </div>
+                <div class="col-md-3">
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <div class="pagination">
+                                {% if products.has_previous %}
+                                    <a href="?page={{ products.previous_page_number }}" class="btn btn-sm" style="background-color: #5b63a3; color: white; margin-right: 5px;">Previous</a>
+                                {% endif %}
+                                
+                                {% for num in products.paginator.page_range %}
+                                    {% if products.number == num %}
+                                        <span class="current-page" style="border: 1px solid; padding: 5px; margin-right: 5px;  background-color: #5b63a3; color: white; width: 30px; display: flex; justify-content: center;">{{ num }}</span>
+                                    {% elif num in products.paginator.page_range|slice:":4" %}
+                                        <a href="?page={{ num }}"  style="border: 1px solid #ccc; padding: 5px; margin-right: 5px; width: 30px; display: flex; justify-content: center;  background-color: #fbf1b8;">{{ num }}</a>
+                                    {% elif num == products.paginator.page_range.4 %}
+                                    <span style="color: #5b63a3; margin-right: 3px;"> .... </span>
+                                    {% elif num in products.paginator.page_range|slice:"-2:" %}
+                                        <a href="?page={{ num }}"  style="border: 1px solid #ccc; padding: 5px; margin-right: 5px; width: 30px; display: flex; justify-content: center;  background-color: #fbf1b8;">{{ num }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if products.has_next %}
+                                    <a href="?page={{ products.next_page_number }}" class="btn btn-sm" style="background-color: #5b63a3; color: white;">Next</a>
+                                {% endif %}
+                            </div>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+          
+
+            <div class="row mt-4">
+              <div class="col-12 text-center">
+                  <a href="{% url 'store:shop' %}" class="btn btn-dark px-4 py-2">
+                      Explore All
+                  </a>
+              </div>
+          </div>
+
+        </section>
+
+        <!-- CATEGORIES SECTION-->
+        <!-- <section class="pt-5">
+          <header class="text-center">
+            <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
+            <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
+          </header>
+          <div class="row">
+          {% if categories %}
+            {% for category in categories %}
+
+              <div class="col-md-4 mb-4 mb-md-0">
+                <a class="category-item" href="{% url 'store:category-products' category.id %}">
+                  {% if category.category_image %}
+                    <img class="img-fluid" src="{{ category.category_image.url }}" alt="{{ category.title }}">
+                    {% else %}
+                    <img class="img-fluid" src="{% static 'img/cat-img-1.jpg' %}" alt="{{ category.title }}">
+                  {% endif %}
+                  <strong class="category-item-title">{{ category.title }}</strong>
+                </a>
+              </div>
+            
+            {% endfor %}
+          {% endif %}
+          </div>
+        </section> -->
+
+
+         <section class="py-5">
+          <header class="text-center">
+            <!-- <p class="small text-muted small text-uppercase mb-1">Made the hard way</p> -->
+            <h2 class="h5 text-uppercase mb-4">Contact Us</h2>
+          </header>
+        
+
+       <div class="container py-5">
+  <div class="card col-md-12 p-0">
+    <!-- Card Header -->
+    <!-- <div class="card-header bg-grey text-white text-center">
+      <h4 class="mb-0">Contact Us</h4>
+    </div> -->
+
+    <!-- Card Body with 4 Sections -->
+    <div class="card-body">
+      <div class="row text-center">
+
+        <!-- Contact -->
+        <div class="col-md-6 mb-4">
+          <i class="fas fa-phone fa-2x text-primary mb-2"></i>
+          <h5 class="mb-1">Contact</h5>
+          <p class="text-muted mb-0">+92 340 0226191</p>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6 mb-4">
+          <i class="fas fa-envelope fa-2x text-danger mb-2"></i>
+          <h5 class="mb-1">Email</h5>
+          <p class="text-muted mb-0">grhc19@gmail.com</p>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="col-md-6">
+          <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
+          <h5 class="mb-1">WhatsApp</h5>
+          <p class="text-muted mb-0">+92 340 0226191</p>
+        </div>
+
+        <!-- Address -->
+        <div class="col-md-6">
+          <i class="fas fa-map-marker-alt fa-2x text-warning mb-2"></i>
+          <h5 class="mb-1">Address</h5>
+          <p class="text-muted mb-0">26/C old sunset Boulevard, Phase 2, DHA, KARACHI</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </section>
+
+
+        <!-- SERVICES-->
+        <section class="py-5 bg-light">
+          <div class="container">
+            <div class="row text-center">
+              <div class="col-lg-4 mb-3 mb-lg-0">
+                <div class="d-inline-block">
+                  <div class="media align-items-end">
+                    <svg class="svg-icon svg-icon-big svg-icon-light">
+                      <use xlink:href="#delivery-time-1"> </use>
+                    </svg>
+                    <div class="media-body text-left ml-3">
+                      <h6 class="text-uppercase mb-1">Free shipping</h6>
+                      <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 mb-3 mb-lg-0">
+                <div class="d-inline-block">
+                  <div class="media align-items-end">
+                    <svg class="svg-icon svg-icon-big svg-icon-light">
+                      <use xlink:href="#helpline-24h-1"> </use>
+                    </svg>
+                    <div class="media-body text-left ml-3">
+                      <h6 class="text-uppercase mb-1">24 x 7 service</h6>
+                      <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="d-inline-block">
+                  <div class="media align-items-end">
+                    <svg class="svg-icon svg-icon-big svg-icon-light">
+                      <use xlink:href="#label-tag-1"> </use>
+                    </svg>
+                    <div class="media-body text-left ml-3">
+                      <h6 class="text-uppercase mb-1">Festival offer</h6>
+                      <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <br><br>
+      </div>
+
+      {% endblock content %}

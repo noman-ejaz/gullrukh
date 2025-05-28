@@ -1,0 +1,73 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+      {% block content %}
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+<div class="row">
+    <h4>Customers</h4>
+    </div>
+
+    
+
+      <div class="row">
+            
+            <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="header">
+                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Brand</button> -->
+                    </div>
+
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table display" id="example" style="width:100%">
+                      <thead>
+                        <tr>
+                         
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Date Joined</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in userData %}
+                        <tr>
+                          
+                          <td>{{item.username}}</td>
+                          <td>{{item.email}}</td>
+                          <td>{{item.date_joined}}</td>
+                          
+                            
+                          
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                     
+                    </table>
+                  </div>
+                </div>
+              </div>
+    
+     
+      
+      </div>
+
+
+
+
+
+
+      {% endblock content %}
+      

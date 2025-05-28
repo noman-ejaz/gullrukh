@@ -1,0 +1,162 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GullRukh - Admin Panel</title>
+    
+    <link rel="stylesheet" href="{% static 'vendor/nouislider/nouislider.min.css' %}">
+    <link href="{% static 'admin_styles/assets/libs/chartist/dist/chartist.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'admin_styles/dist/css/style.min.css' %}" rel="stylesheet" />
+    
+    <link href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" rel="stylesheet"/>
+    
+    <style>
+        /* Ensure navbar stays at the top */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        /* Push content down to avoid overlap */
+        .page-wrapper {
+            margin-top: 60px;
+        }
+        /* Sidebar toggle button */
+        .sidebar-toggle {
+            border: none;
+            background: none;
+            font-size: 24px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body style="background-color: #edf5f8;">
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+
+        <!-- Navbar (Fixed at the top) -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #8b7fac;">
+            <div class="container-fluid">
+                <!-- Sidebar Toggle Button (for mobile) -->
+                <button class="sidebar-toggle d-lg-none me-3" id="sidebarToggle">
+                    <i class="mdi mdi-menu"></i>
+                </button>
+
+                <!-- Brand -->
+                <a class="navbar-brand" href="{% url 'store:admin_index' %}">GullRukh - Admin Panel</a>
+
+                <!-- Right Side -->
+                <div class="d-flex align-items-center ms-auto">
+
+                    <div>
+                    <a href="{% url 'store:home' %}" type="button" class="btn btn-light position-relative me-3">Visit Site</a>                          
+                    </div>
+
+
+
+                  
+                  
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            {{ request.user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'store:logoutF' %}">Logout</a></li>
+                            <a class="dropdown-item border-0 transition-link" href="{% url 'store:password-change' %}">Change Password</a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="left-sidebar d-lg-block d-none" data-sidebarbg="skin6">
+            <div class="scroll-sidebar">
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:admin_index' %}" aria-expanded="false">
+                                <i class="mdi mdi-view-dashboard"></i>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:allCustomers' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Customers</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:addBrand' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Brand</span>
+                            </a>
+                        </li>
+                         <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:addBaseType' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Base Type</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:addCategory' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Category</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:addProduct' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Products</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:allOrders' %}" aria-expanded="false">
+                                <i class="mdi mdi-border-all"></i>
+                                <span class="hide-menu">Orders</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'admin_styles/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'admin_styles/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'admin_styles/dist/js/app-style-switcher.js' %}"></script>
+    <script src="{% static 'admin_styles/dist/js/waves.js' %}"></script>
+    <script src="{% static 'admin_styles/dist/js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'admin_styles/dist/js/custom.js' %}"></script>
+    <script src="{% static 'admin_styles/assets/libs/chartist/dist/chartist.min.js' %}"></script>
+    <script src="{% static 'admin_styles/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'admin_styles/dist/js/pages/dashboards/dashboard1.js' %}"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+
+    <script>
+        // Initialize DataTable
+        new DataTable('#example');
+
+        // Sidebar Toggle for Mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.querySelector('.left-sidebar').classList.toggle('d-none');
+        });
+    </script>
+
+</body>
+</html>
